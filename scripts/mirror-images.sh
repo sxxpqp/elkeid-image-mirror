@@ -40,6 +40,9 @@ for source in "${sources[@]}"; do
     echo "Unexpected image reference: $source" >&2
     exit 1
   fi
+  if [[ "$name_and_tag" == all-in-one:* ]]; then
+    name_and_tag="elkeid-$name_and_tag"
+  fi
   target="$ACR_REGISTRY/$ACR_NAMESPACE/${name_and_tag}"
   if [[ -n "${seen[$target]:-}" ]]; then
     echo "Conflicting source images for $target: ${seen[$target]} and $source" >&2
