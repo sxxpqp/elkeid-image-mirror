@@ -1,6 +1,11 @@
 name: Mirror Elkeid release images
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mirror-images.yml'
+      - 'scripts/mirror-images.sh'
   workflow_dispatch:
 
 permissions:
