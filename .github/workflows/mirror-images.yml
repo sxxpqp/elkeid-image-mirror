@@ -1,0 +1,28 @@
+name: Mirror Elkeid release images
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: elkeid-acr-mirror
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Import upstream images and publish to ACR
+        env:
+          ALIYUN_REGISTRY_USER: ${{ secrets.ALIYUN_REGISTRY_USER }}
+          ALIYUN_REGISTRY_PASSWORD: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
+          ACR_REGISTRY: ${{ vars.ACR_REGISTRY || 'registry.cn-hangzhou.aliyuncs.com' }}
+          ACR_NAMESPACE: ${{ vars.ACR_NAMESPACE || 'sxxpqp' }}
+        run: bash scripts/mirror-images.sh
